@@ -10,7 +10,7 @@ from config import API_KEY, WP_API_KEY, RATE_LIMIT_DELAY, CSV_INPUT_PATH
 client = OpenAI(api_key=API_KEY)
 
 loopcount = 0
-maxloops = 1000
+maxloops = 6256
 loopcount_lock = threading.Lock()
 
 def debug_decorator(func):
@@ -112,8 +112,8 @@ def process_row(row, index):
     # Handle URL processing
     if '/tags/' in url:
         tag = url.split('/tags/')[-1]
-        generated_meta_description = f"Explore articles related to {tag} on RVA Magazine."
-        seo_title = generate_seo_title(title, f"Articles related to {tag} on RVA Magazine")
+        meta_description = f"Explore articles related to {title} on RVA Magazine."
+        seo_title = f"Articles related to {title} on RVA Magazine"
         title = f"Tagged: {tag}"
 
     else:
@@ -125,7 +125,7 @@ def process_row(row, index):
 
 
 def main(df):
-    with ThreadPoolExecutor(max_workers=3) as executor:
+    with ThreadPoolExecutor(max_workers=15) as executor:
         # Map futures to their corresponding DataFrame index for easy access later
         future_to_index = {}
         submitted_count = 0  # Keep track of how many tasks have been submitted
